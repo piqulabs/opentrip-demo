@@ -4,9 +4,11 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { CheckCircle, WhatsappLogo } from "@phosphor-icons/react";
+import { motion, useReducedMotion } from "motion/react";
 import { departures, formatIDR, trip } from "@/lib/trip-data";
 import { getSnapshot } from "@/lib/store";
-import { usePrefersReducedMotion } from "@/lib/use-reduced-motion";
+
+const ease = [0.16, 1, 0.3, 1] as const;
 
 export function SuccessView({ tripId }: { tripId: string }) {
   const search = useSearchParams();
@@ -17,7 +19,7 @@ export function SuccessView({ tripId }: { tripId: string }) {
   const departure = departures.find((d) => d.id === departureId);
   const booking = getSnapshot().bookings.find((b) => b.id === bookingId);
 
-  const reduce = usePrefersReducedMotion();
+  const reduce = useReducedMotion();
   const [step, setStep] = useState(reduce ? 3 : 0);
   const [displaySeats, setDisplaySeats] = useState(before);
 
@@ -65,16 +67,26 @@ export function SuccessView({ tripId }: { tripId: string }) {
       </header>
 
       <main className="mx-auto max-w-lg px-4 py-10 sm:px-6">
-        <div
-          className={`transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            step >= 1 ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-          }`}
+        <motion.div
+          initial={reduce ? false : { opacity: 0, y: 16 }}
+          animate={
+            step >= 1 ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }
+          }
+          transition={{ duration: 0.55, ease }}
         >
-          <CheckCircle
-            weight="fill"
-            className="size-10 text-scrub"
-            aria-hidden
-          />
+          <motion.div
+            initial={reduce ? false : { scale: 0.6, opacity: 0 }}
+            animate={
+              step >= 1 ? { scale: 1, opacity: 1 } : { scale: 0.6, opacity: 0 }
+            }
+            transition={{ type: "spring", stiffness: 260, damping: 18 }}
+          >
+            <CheckCircle
+              weight="fill"
+              className="size-10 text-scrub"
+              aria-hidden
+            />
+          </motion.div>
           <h1 className="font-display mt-4 text-2xl font-semibold tracking-tight text-banda">
             Kursi kepegang.
           </h1>
@@ -82,13 +94,15 @@ export function SuccessView({ tripId }: { tripId: string }) {
             DP masuk. Peserta otomatis masuk sistem. Kamu nggak perlu balas DM
             atau cek mutasi rekening.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Mechanism moment: quota drop */}
-        <div
-          className={`mt-8 overflow-hidden rounded-[var(--radius-jn)] border border-banda/15 bg-banda text-salt transition-all delay-100 duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            step >= 2 ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-          }`}
+        <motion.div
+          className="mt-8 overflow-hidden rounded-[var(--radius-jn)] border border-banda/15 bg-banda text-salt"
+          initial={reduce ? false : { opacity: 0, y: 20 }}
+          animate={
+            step >= 2 ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+          }
+          transition={{ duration: 0.55, ease }}
         >
           <div className="border-b border-salt/15 px-4 py-3">
             <p className="text-xs font-medium uppercase tracking-wide text-salt/70">
@@ -104,9 +118,15 @@ export function SuccessView({ tripId }: { tripId: string }) {
             </div>
             <div className="bg-banda px-4 py-4">
               <p className="text-xs text-salt/65">Kuota sekarang</p>
-              <p className="font-mono-num mt-1 text-3xl font-semibold text-shallow">
+              <motion.p
+                key={displaySeats}
+                className="font-mono-num mt-1 text-3xl font-semibold text-shallow"
+                initial={reduce ? false : { opacity: 0.35, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.25 }}
+              >
                 {displaySeats}
-              </p>
+              </motion.p>
             </div>
           </div>
           <div className="space-y-2 px-4 py-4 text-sm leading-relaxed text-salt/90">
@@ -122,12 +142,15 @@ export function SuccessView({ tripId }: { tripId: string }) {
               {bookingId ? ` · ${bookingId}` : ""}
             </p>
           </div>
-        </div>
+        </motion.div>
 
-        <div
-          className={`mt-6 rounded-[var(--radius-jn)] border border-banda/12 bg-salt p-4 transition-all delay-150 duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            step >= 3 ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-          }`}
+        <motion.div
+          className="mt-6 rounded-[var(--radius-jn)] border border-banda/12 bg-salt p-4"
+          initial={reduce ? false : { opacity: 0, y: 18 }}
+          animate={
+            step >= 3 ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 }
+          }
+          transition={{ duration: 0.55, ease }}
         >
           <p className="text-sm font-semibold text-banda">Grup WA trip</p>
           <p className="mt-1 text-sm text-ink/70">
@@ -158,17 +181,20 @@ export function SuccessView({ tripId }: { tripId: string }) {
             href={trip.waGroupMock}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-[var(--radius-jn)] bg-[#25D366] text-sm font-semibold text-white transition-transform active:scale-[0.98]"
+            className="mt-4 inline-flex h-11 w-full items-center justify-center gap-2 rounded-[var(--radius-jn)] bg-[#25D366] text-sm font-semibold text-white transition-transform hover:scale-[1.01] active:scale-[0.98]"
           >
             <WhatsappLogo weight="fill" className="size-5" />
             Buka grup WA trip
           </a>
-        </div>
+        </motion.div>
 
-        <div
-          className={`mt-8 transition-all delay-200 duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            step >= 3 ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-          }`}
+        <motion.div
+          className="mt-8"
+          initial={reduce ? false : { opacity: 0, y: 16 }}
+          animate={
+            step >= 3 ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }
+          }
+          transition={{ duration: 0.55, delay: 0.08, ease }}
         >
           <p className="text-sm font-semibold text-banda">
             Buat owner yang lagi nonton demo ini
@@ -180,24 +206,23 @@ export function SuccessView({ tripId }: { tripId: string }) {
           <div className="mt-4 flex flex-col gap-2 sm:flex-row">
             <Link
               href="/admin"
-              className="inline-flex h-11 flex-1 items-center justify-center rounded-[var(--radius-jn)] bg-banda text-sm font-semibold text-salt transition-transform active:scale-[0.98]"
+              className="inline-flex h-11 flex-1 items-center justify-center rounded-[var(--radius-jn)] bg-banda text-sm font-semibold text-salt transition-transform hover:scale-[1.01] active:scale-[0.98]"
             >
               Lihat di Admin
             </Link>
             <Link
               href="/"
-              className="inline-flex h-11 flex-1 items-center justify-center rounded-[var(--radius-jn)] border border-banda/20 bg-salt text-sm font-semibold text-banda transition-transform active:scale-[0.98]"
+              className="inline-flex h-11 flex-1 items-center justify-center rounded-[var(--radius-jn)] border border-banda/20 bg-salt text-sm font-semibold text-banda transition-transform hover:scale-[1.01] active:scale-[0.98]"
             >
               Cek landing (kuota turun)
             </Link>
           </div>
-        </div>
+        </motion.div>
 
         <p className="mt-10 text-center text-xs text-ink/45">
-          Trip ID: {tripId}  ·  mock payment
+          Trip ID: {tripId} · mock payment
         </p>
       </main>
     </div>
   );
 }
-

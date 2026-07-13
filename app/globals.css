@@ -72,3 +72,23 @@ body {
   font-family: var(--font-mono), ui-monospace, monospace;
   font-variant-numeric: tabular-nums;
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .live-dot {
+    animation: live-pulse 1.8s ease-in-out infinite;
+  }
+}
+
+@keyframes live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--shallow) 55%, transparent);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.15);
+    box-shadow: 0 0 0 6px transparent;
+  }
+}

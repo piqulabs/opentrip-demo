@@ -2,6 +2,7 @@
 
 import { Boat, ForkKnife, MapPin, MoonStars } from "@phosphor-icons/react";
 import { trip } from "@/lib/trip-data";
+import { Reveal, Stagger, StaggerItem } from "@/components/motion/Reveal";
 
 const facts = [
   {
@@ -29,9 +30,9 @@ const facts = [
 export function LogisticsStrip() {
   return (
     <section className="border-b border-banda/8 bg-salt px-4 py-8 sm:px-6">
-      <div className="mx-auto grid max-w-3xl gap-5 sm:grid-cols-2">
+      <Stagger className="mx-auto grid max-w-3xl gap-5 sm:grid-cols-2">
         {facts.map((f) => (
-          <div key={f.label} className="flex gap-3">
+          <StaggerItem key={f.label} className="flex gap-3">
             <f.icon
               weight="duotone"
               className="mt-0.5 size-5 shrink-0 text-shallow"
@@ -43,12 +44,12 @@ export function LogisticsStrip() {
               </p>
               <p className="mt-0.5 text-[15px] leading-snug text-ink">{f.value}</p>
             </div>
-          </div>
+          </StaggerItem>
         ))}
-      </div>
-      <p className="mx-auto mt-5 max-w-3xl text-sm leading-relaxed text-ink/65">
-        {trip.meetingNote}
-      </p>
+      </Stagger>
+      <Reveal delay={0.15} className="mx-auto mt-5 max-w-3xl">
+        <p className="text-sm leading-relaxed text-ink/65">{trip.meetingNote}</p>
+      </Reveal>
     </section>
   );
 }

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import {
   calcDp,
   calcTotal,
@@ -14,7 +15,10 @@ import {
 import { payDp } from "@/lib/store";
 import { useSeatsLeft } from "@/lib/use-store";
 
+const ease = [0.16, 1, 0.3, 1] as const;
+
 export function BookingForm({ tripId }: { tripId: string }) {
+  const reduce = useReducedMotion();
   const router = useRouter();
   const search = useSearchParams();
   const initialDep =
@@ -119,9 +123,12 @@ export function BookingForm({ tripId }: { tripId: string }) {
         </div>
       </header>
 
-      <form
+      <motion.form
         onSubmit={onSubmit}
         className="mx-auto max-w-lg px-4 pt-8 sm:px-6"
+        initial={reduce ? false : { opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.55, ease }}
       >
         <h1 className="font-display text-2xl font-semibold tracking-tight text-banda">
           Amankan kursi
@@ -281,11 +288,11 @@ export function BookingForm({ tripId }: { tripId: string }) {
         <button
           type="submit"
           disabled={paying || seatsLeft < 1}
-          className="mt-6 flex h-12 w-full items-center justify-center rounded-[var(--radius-jn)] bg-banda text-[15px] font-semibold text-salt transition-transform active:scale-[0.98] disabled:opacity-50"
+          className="mt-6 flex h-12 w-full items-center justify-center rounded-[var(--radius-jn)] bg-banda text-[15px] font-semibold text-salt transition-transform hover:scale-[1.01] active:scale-[0.98] disabled:opacity-50"
         >
           {paying ? "Memproses…" : `Bayar DP ${formatIDR(dp)}`}
         </button>
-      </form>
+      </motion.form>
     </div>
   );
 }

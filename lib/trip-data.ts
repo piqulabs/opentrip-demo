@@ -87,7 +87,7 @@ export const departures: Departure[] = [
 export const itinerary: ItineraryDay[] = [
   {
     day: 1,
-    title: "Labuan Bajo â†’ Kelor â†’ Manjarite â†’ Kalong",
+    title: "Labuan Bajo - Kelor - Manjarite - Kalong",
     overnight: "Tidur di kapal (kabin AC)",
     blocks: [
       {
@@ -136,7 +136,7 @@ export const itinerary: ItineraryDay[] = [
   },
   {
     day: 2,
-    title: "Padar â†’ Pink Beach â†’ Komodo â†’ Taka Makassar â†’ Manta Point",
+    title: "Padar - Pink Beach - Komodo - Taka Makassar - Manta Point",
     overnight: "Tidur di kapal (kabin AC)",
     blocks: [
       {
@@ -195,7 +195,7 @@ export const itinerary: ItineraryDay[] = [
   },
   {
     day: 3,
-    title: "Siaba / Sebayur â†’ kembali Labuan Bajo",
+    title: "Siaba / Sebayur - kembali Labuan Bajo",
     overnight: "Trip selesai",
     blocks: [
       {
@@ -234,7 +234,7 @@ export const included = [
   "Life jacket",
   "Tour leader + crew kapal",
   "Dokumentasi foto trip (Google Drive, 2-3 hari setelah pulang)",
-  "Transfer hotel area Labuan Bajo / Bandara Komodo (LBJ) â†” dermaga",
+  "Transfer hotel area Labuan Bajo / Bandara Komodo (LBJ) - dermaga",
 ];
 
 export const excluded = [
